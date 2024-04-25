@@ -15,10 +15,42 @@ class LinkedList:
     def print_list(self):
         temp = self.head
         i = -1
+        print('list items:')
         while temp is not None:
             i += 1
             print(f"[{i}] - {temp.value}")
             temp = temp.next
+        print(f"list length: {self.length}")
+
+    def get(self, index):
+        if index < 0 or self.length - 1 < index:
+            print('\nout of range index')
+            return None
+
+        temp = self.head
+        for _ in range(index):
+            temp = temp.next
+
+        return temp
+    
+    # def set_value(self, index, value):
+    #     if index < 0 or self.length - 1 < index:
+    #         print('\nout of range index')
+    #         return None
+        
+    #     temp = self.head
+    #     for _ in range(index):
+    #         temp = temp.next
+        
+    #     temp.value = value
+    #     return temp.value
+    
+    def set_value(self, index, value):
+        temp = self.get(index)
+        if temp:
+            temp.value = value
+            return True
+        return False
 
     def append(self, value):
         # create a new Node
@@ -54,7 +86,23 @@ class LinkedList:
             self.head = None
             self.tail = None
 
-        return popped_node
+        return popped_node.value
+    
+    def pop_first(self):
+        if self.length == 0:
+            return None
+        
+        popped_node = self.head
+        
+        if self.length == 1:
+            self.head = None
+            self.tail = None
+
+        else:
+            self.head = popped_node.next
+        
+        self.length -= 1
+        return popped_node.value
     
     def prepend(self, value):
         # create a new Node
@@ -99,3 +147,29 @@ my_linked_list.print_list()
 print("\nprepend(): length = 2")
 my_linked_list.prepend(3)
 my_linked_list.print_list()
+
+print("\npop_first(): result length = 1")
+my_linked_list.pop_first()
+my_linked_list.print_list()
+print(f"returned value: {my_linked_list.pop_first()}")
+
+print("\npop_first(): result length = 0")
+my_linked_list.pop_first()
+my_linked_list.print_list()
+print(f"returned value: {my_linked_list.pop_first()}")
+
+print("\npop_first(): empty_list")
+my_linked_list.pop_first()
+my_linked_list.print_list()
+print(f"returned value: {my_linked_list.pop_first()}")
+
+my_linked_list.append(2)
+my_linked_list.append(3)
+my_linked_list.append(4)
+print(f"\nget(2) => {my_linked_list.get(2).value}")
+print(f"get(3) => {my_linked_list.get(3)}")
+print(f"\nget(0) => {my_linked_list.get(0).value}")
+
+print(f"\nset_value(2, 37) => {my_linked_list.set_value(2, 37)}")
+my_linked_list.print_list()
+
