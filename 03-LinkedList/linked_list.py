@@ -7,7 +7,6 @@ class Node:
 class LinkedList:
     def __init__(self, value):
         # create a new Node
-
         self.head = Node(value)
         self.tail = self.head
         self.length = 1
@@ -51,6 +50,22 @@ class LinkedList:
             temp.value = value
             return True
         return False
+
+    def insert(self, index, value):
+        if index < 0 or self.length - 1 < index:
+            print('out of range index')
+            return False
+        
+        temp = self.head
+        prev = None
+        for _ in range(index):
+            prev = temp
+            temp = temp.next
+        
+        prev.next = Node(value)
+        prev.next.next = temp
+        self.length += 1
+        return True
 
     def append(self, value):
         # create a new Node
@@ -117,9 +132,35 @@ class LinkedList:
             self.head.next = temp
             self.length += 1
 
-    # def insert(self, index, value):
-    #     # create a new Node
-    #     # insert Node at index
+    def remove(self, index):
+        if index < 0 or self.length <= index:
+            return None
+        
+        if index == 0:
+            return self.pop_first()
+        
+        if index == self.length - 1:
+            return self.pop()
+        
+        prev = self.get(index - 1)
+        temp = prev.next
+        prev.next = temp.next
+        temp.next = None
+        self.length -= 1
+        return temp
+    
+    def reverse(self):
+        temp = self.head
+        self.head = self.tail
+        self.tail = temp
+        after = temp.next
+        before = None
+
+        for _ in range(self.length):
+            after = temp.next
+            temp.next = before
+            before = temp
+            temp = after
     
 
 my_linked_list = LinkedList(1)
@@ -173,3 +214,14 @@ print(f"\nget(0) => {my_linked_list.get(0).value}")
 print(f"\nset_value(2, 37) => {my_linked_list.set_value(2, 37)}")
 my_linked_list.print_list()
 
+print('\ninsert(1, 43)')
+my_linked_list.insert(1, 43)
+my_linked_list.print_list()
+
+print('\nremove(2)')
+my_linked_list.remove(2)
+my_linked_list.print_list()
+
+print('\nreverse()')
+my_linked_list.reverse()
+my_linked_list.print_list()
