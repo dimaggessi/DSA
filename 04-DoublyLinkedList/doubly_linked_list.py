@@ -17,6 +17,31 @@ class DoublyLinkedList:
             print(temp.value)
             temp = temp.next
 
+    def get(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        
+        temp = self.head
+        if index < self.length/2:
+            for _ in range(index):
+                temp = temp.next
+        else:
+            temp = self.tail
+            for _ in range(self.length -1, index, -1):
+                temp = temp.prev
+        return temp
+    
+    #set is a keyword in python
+    def set_value(self, index, value):
+        if index < 0 or index >= self.length:
+            return None
+        
+        temp = self.get(index)
+        if temp:
+            temp.value = value
+            return True
+        return False
+
     def append(self, value):
         new_node = Node(value)
 
@@ -78,13 +103,80 @@ class DoublyLinkedList:
 
         self.length -= 1
         return temp
-            
+        
+    def insert(self, index, value):
+        #self.length is a valid value here (to insert a new node)
+        if index < 0 or index > self.length:
+            return None
+        if index == 0:
+            return self.prepend(value)
+        if index == self.length:
+            return self.append(value)
+        
+        new_node = Node(value)
+        before = self.get(index - 1)
+        after = before.next
 
+        new_node.prev = before
+        new_node.next = after
+        before.next = new_node
+        after.prev = new_node
 
+        self.length += 1
+        return True
+    
+    def remove(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            self.pop_first()
+        if index == self.length - 1:
+            self.pop()
+        
+        temp = self.get(index)
+        temp.next.prev = temp.prev
+        temp.prev.next = temp.next
+        temp.next = None
+        temp.prev = None
+
+        self.length -= 1
+        return temp
 
 my_doubly_linked_list = DoublyLinkedList(1)
 my_doubly_linked_list.append(2)
 my_doubly_linked_list.pop()
 my_doubly_linked_list.prepend(7)
 my_doubly_linked_list.pop_first()
+my_doubly_linked_list.pop_first()
+
+my_doubly_linked_list.print_list()
+print('\n')
+
+my_doubly_linked_list = DoublyLinkedList(0)
+my_doubly_linked_list.append(1)
+my_doubly_linked_list.append(2)
+my_doubly_linked_list.append(3)
+
+print(my_doubly_linked_list.get(1).value)
+print(my_doubly_linked_list.get(2).value)
+print('\n')
+
+my_doubly_linked_list.set_value(2, 3)
+
+my_doubly_linked_list.print_list()
+print('\n')
+
+my_doubly_linked_list = DoublyLinkedList(1)
+my_doubly_linked_list.append(3)
+
+my_doubly_linked_list.insert(1, 2)
+
+my_doubly_linked_list.print_list()
+print('\n')
+
+my_doubly_linked_list = DoublyLinkedList(0)
+my_doubly_linked_list.append(1)
+my_doubly_linked_list.append(2)
+
+print(my_doubly_linked_list.remove(1).value, '\n')
 my_doubly_linked_list.print_list()
